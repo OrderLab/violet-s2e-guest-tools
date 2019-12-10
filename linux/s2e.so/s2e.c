@@ -47,6 +47,12 @@ static void s2e_load_module(procmap_module_t *module, const char *current_proces
     }
 
     load.entry_point = module_get_runtime_entry_point(module);
+    if (load.entry_point > module->elf->entry_point) {
+      // assuming the load bias has to be > 0
+      load.load_bias = load.entry_point - module->elf->entry_point;
+    } else {
+      load.load_bias = 0;
+    }
     load.module_path = (uintptr_t) module->path;
     load.phdr = (uintptr_t) phdr;
     load.phdr_size = phdr_size;
