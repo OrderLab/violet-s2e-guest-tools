@@ -94,6 +94,7 @@ extern "C" {
 #define BASE_S2E_CLEAR_TEMPS    0x53
 #define BASE_S2E_FORK_COUNT     0x54
 #define BASE_S2E_FLUSH_TBS      0x55
+#define BASE_S2E_MAYBE_SYMBOLIC 0x60  // VIOLET changes: potentially make a region symbolic
 
 // Maximum S2E opcode allowed
 #define BASE_S2E_MAX_OPCODE     0x70

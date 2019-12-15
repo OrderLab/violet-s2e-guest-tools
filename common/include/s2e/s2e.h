@@ -211,6 +211,38 @@ static inline void s2e_make_symbolic(void *buf, int size, const char *name) {
     );
 }
 
+/** VIOLET changes BEGIN **/
+///
+/// \brief Consider making this buffer with unconstrained symbolic values. Whether
+/// this buffer gets made symbolic depends on whether during exploring the path
+/// of another symbolic value this buffer is used or not.
+///
+/// In the following example, if we made sv2 symbolic, sv1 and sv3 *maybe* symbolic
+/// then, sv3 should be dynamically made symbolic to fully explore the effect of sv2
+/// on the program.
+///
+/// if (sv1) {
+///   ....
+/// }
+/// if (sv2) {
+///   if (sv3) {
+///     ....
+///   }
+/// }
+/// \param[out] buf The buffer to *potentially* make symbolic
+/// \param[in] size The buffer's size
+/// \param[in] name A descriptive name for the buffer
+///
+static inline void s2e_maybe_symbolic(void *buf, int size, const char *name) {
+    __s2e_touch_string(name);
+    __s2e_touch_buffer(buf, size);
+    __asm__ __volatile__(
+        S2E_INSTRUCTION_REGISTERS_SIMPLE(BASE_S2E_MAYBE_SYMBOLIC)
+        : : "a" (buf), "d" (size), "c" (name) : "memory"
+    );
+}
+/** VIOLET changes END **/
+
 ///
 /// \brief Returns \c true if the given pointer points to symbolic memory
 ///
