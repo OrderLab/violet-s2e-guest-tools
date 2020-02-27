@@ -229,6 +229,17 @@ static inline int s2e_is_symbolic(void *ptr, size_t size) {
     return result;
 }
 
+
+/******VIOLET CHANGE*********/
+static inline void s2e_concretize_all(void *buf, int size) {
+  __asm__ __volatile__(
+  S2E_INSTRUCTION_REGISTERS_SIMPLE(VIOLET_S2E_CONCRETIZEALL)
+  : : "a" (buf), "d" (size) : "memory"
+  );
+}
+
+/****************************/
+
 ///
 /// \brief Concretize the given expression
 ///
@@ -242,6 +253,9 @@ static inline void s2e_concretize(void *buf, int size) {
         : : "a" (buf), "d" (size) : "memory"
     );
 }
+
+
+
 
 ///
 /// \brief Generate a concrete value based on the current path constraints
