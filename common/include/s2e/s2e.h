@@ -322,6 +322,43 @@ static inline unsigned s2e_get_example_uint(unsigned val) {
     return buf;
 }
 
+
+///
+/// \brief Generate a concrete value based on the given expression
+///
+/// The example value is generated without adding state constraints. This is a convenience function to be used in
+/// printfs.
+///
+/// \param[in] val The expression to generate a concrete value for
+/// \return A concrete value
+///
+static inline long s2e_get_example_long(long val) {
+  long buf = val;
+  __asm__ __volatile__(
+  S2E_INSTRUCTION_REGISTERS_SIMPLE(BASE_S2E_EXAMPLE)
+  : : "a" (&buf), "d" (sizeof(buf)) : "memory"
+  );
+  return buf;
+}
+
+///
+/// \brief Generate a concrete value based on the given expression
+///
+/// The example value is generated without adding state constraints. This is a convenience function to be used in
+/// printfs.
+///
+/// \param[in] val The expression to generate a concrete value for
+/// \return A concrete value
+///
+static inline unsigned long int s2e_get_example_ulong(unsigned long int val) {
+  unsigned long int buf = val;
+  __asm__ __volatile__(
+  S2E_INSTRUCTION_REGISTERS_SIMPLE(BASE_S2E_EXAMPLE)
+  : : "a" (&buf), "d" (sizeof(buf)) : "memory"
+  );
+  return buf;
+}
+
 //
 // These functions control the path exploration from within the guest. The guest can enable/disable forking as well as
 // kill states at any point in the code. When forking is disabled, S2E follows only one branch outcome, even if both
