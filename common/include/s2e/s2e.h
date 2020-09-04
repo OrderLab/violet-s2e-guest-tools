@@ -359,6 +359,17 @@ static inline unsigned long int s2e_get_example_ulong(unsigned long int val) {
   return buf;
 }
 
+///
+/// \brief Disable forking and only collect the symbolic conditions
+///
+static inline void s2e_collect_constraint(void)
+{
+  __asm__ __volatile__(
+  S2E_INSTRUCTION_SIMPLE(BASE_S2E_DISABLE_FORK)
+  );
+}
+
+
 //
 // These functions control the path exploration from within the guest. The guest can enable/disable forking as well as
 // kill states at any point in the code. When forking is disabled, S2E follows only one branch outcome, even if both
@@ -383,6 +394,7 @@ static inline void s2e_disable_forking(void)
         S2E_INSTRUCTION_SIMPLE(BASE_S2E_DISABLE_FORK)
     );
 }
+
 
 ///
 /// \brief Forks the given number of times without adding constraints
